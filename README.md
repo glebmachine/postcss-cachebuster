@@ -8,13 +8,15 @@
 
 ```css
 .foo {
-    /* Input example */
+  /* Input example */
+  background-image : url('../images/index/logo.png')
 }
 ```
 
 ```css
 .foo {
   /* Output example */
+    background-image : url('../images/index/logo.png?v14f32a475b8')
 }
 ```
 
@@ -23,5 +25,4 @@
 ```js
 postcss([ require('postcss-cachebuster') ])
 ```
-
 See [PostCSS] docs for examples for your environment.
