@@ -15,12 +15,17 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
 
       // only background-image declarations
       if (declaration.prop !== 'background-image') return;
-      
-      var assetUrl = url.parse(declaration.value.replace(/(url\(|\)|'|")/g,''));
+
+      // only url
+      if (!/url\(('|")[^'"]+('|")/.test(declaration.value)) return;
+
+      var parsedUrl = /url\(('|")([^'"]+)('|")/.exec(declaration.value);
+      var assetUrl = url.parse(parsedUrl[2]);
       var inputPath = url.parse(inputFile);
 
       // only locals
       if (inputPath.host) return;
+      if (assetUrl.pathname.indexOf('//') == 0) return;
         
       // resolve path
       var assetPath = path.dirname(inputPath.pathname)
