@@ -17,9 +17,9 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
       if (declaration.prop !== 'background-image') return;
 
       // only url
-      if (!/url\(('|")[^'"]+('|")/.test(declaration.value)) return;
+      if (!/url\(('|")?[^'"\)]+('|")?\)/.test(declaration.value)) return;
 
-      var parsedUrl = /url\(('|")([^'"]+)('|")/.exec(declaration.value);
+      var parsedUrl = /url\(('|")?([^'"\)]+)('|")?\)/.exec(declaration.value);
       var assetUrl = url.parse(parsedUrl[2]);
       var inputPath = url.parse(inputFile);
 
