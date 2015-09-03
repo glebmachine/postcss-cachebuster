@@ -9,7 +9,7 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
 
   return function (css) {
 
-    var inputFile = css.source.input.file
+    var inputFile = css.source.input.file;
 
     css.eachDecl(function(declaration){
 
