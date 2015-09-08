@@ -19,8 +19,8 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
       // only url
       if (!/url\(('|")?[^'"\)]+('|")?\)/.test(declaration.value)) return;
 
-      var parsedUrl = /url\(('|")?([^'"\)]+)('|")?\)/.exec(declaration.value);
-      var assetUrl = url.parse(parsedUrl[2]);
+      var background = /^(.*?)url\(('|")?([^'"\)]+)('|")?\)(.*?)$/.exec(declaration.value);
+      var assetUrl = url.parse(background[3]);
       var inputPath = url.parse(inputFile);
 
       // only locals
@@ -44,7 +44,7 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
       }
 
       // replace old value
-      declaration.value = "url('"+url.format(assetUrl)+"')";      
+      declaration.value = background[1]+"url('"+url.format(assetUrl)+"')"+background[5];
     
     })
 
