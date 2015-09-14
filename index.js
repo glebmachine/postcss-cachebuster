@@ -6,6 +6,7 @@ var path = require('canonical-path');
 
 module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
   opts = opts || {};
+  opts.imagesPath = opts.imagesPath || '';
 
   return function (css) {
 
@@ -23,9 +24,15 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
       if (inputPath.host) return;
         
       // resolve path
-      var assetPath = path.dirname(inputPath.pathname)
-      assetPath = assetPath+'/'+assetUrl.pathname;
-      assetPath = path.normalize(assetPath);
+      if (/^\//.test(assetUrl.pathname)) {
+        // absolute
+        assetPath = path.normalize(process.cwd()+ '/'+opts.imagesPath+'/' + assetUrl.pathname)
+      } else {
+        // relative
+        assetPath = assetPath+'/'+assetUrl.pathname;
+        assetPath = path.normalize(assetPath);
+        assetPath = path.normalize(assetUrl.pathname);
+      }
 
       // cachebuster
       var mtime = fs.statSync(assetPath).mtime;
