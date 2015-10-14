@@ -10,18 +10,23 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
 
   return function (css) {
 
-    var inputFile = css.source.input.file
+    var inputFile = css.source.input.file;
 
     css.eachDecl(function(declaration){
 
-      // only background-image declarations
-      if (declaration.prop !== 'background-image') return;
-      
-      var assetUrl = url.parse(declaration.value.replace(/(url\(|\)|'|")/g,''));
+      // only background, background-image declarations
+      if (declaration.prop !== 'background' && declaration.prop !== 'background-image') return;
+
+      // only url
+      if (!/url\(('|")?[^'"\)]+('|")?\)/.test(declaration.value)) return;
+
+      var background = /^(.*?)url\(('|")?([^'"\)]+)('|")?\)(.*?)$/.exec(declaration.value);
+      var assetUrl = url.parse(background[3]);
       var inputPath = url.parse(inputFile);
 
       // only locals
       if (inputPath.host) return;
+      if (assetUrl.pathname.indexOf('//') == 0) return;
         
       // resolve path
       if (/^\//.test(assetUrl.pathname)) {
@@ -46,7 +51,7 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
       }
 
       // replace old value
-      declaration.value = "url('"+url.format(assetUrl)+"')";      
+      declaration.value = background[1]+"url('"+url.format(assetUrl)+"')"+background[5];
     
     })
 
