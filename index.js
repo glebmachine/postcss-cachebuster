@@ -68,7 +68,7 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
       }
 
       // complete url with cachebuster
-      if (assetUrl.search) {
+      if (assetUrl.search && assetUrl.search.length > 1) {
         assetUrl.search = assetUrl.search + '&v' + cachebuster;
       } else {
         assetUrl.search = '?v' + cachebuster;
