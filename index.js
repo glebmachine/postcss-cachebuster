@@ -31,6 +31,7 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
 
       var background = /^(.*?)url\(('|")?([^'"\)]+)('|")?\)(.*?)$/.exec(declaration.value);
       var assetUrl = url.parse(background[3]);
+      var assetPath = decodeURI(assetUrl.pathname);
       var inputPath = url.parse(inputFile);
 
       // only locals
@@ -41,10 +42,10 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
       // resolve path
       if (/^\//.test(assetUrl.pathname)) {
         // absolute
-        assetPath = path.normalize(process.cwd()+ '/'+opts.imagesPath+'/' + assetUrl.pathname)
+        assetPath = path.normalize(process.cwd()+'/'+opts.imagesPath+'/'+assetPath)
       } else {
         // relative
-        assetPath = path.dirname(inputFile)+'/'+assetUrl.pathname;
+        assetPath = path.dirname(inputFile)+'/'+assetPath;
         assetPath = path.normalize(assetPath);
       }
 
