@@ -44,7 +44,7 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
         assetPath = path.normalize(process.cwd()+ '/'+opts.imagesPath+'/' + assetUrl.pathname)
       } else {
         // relative
-        assetPath = path.dirname(inputPath.pathname)+'/'+assetUrl.pathname;
+        assetPath = path.dirname(inputFile)+'/'+assetUrl.pathname;
         assetPath = path.normalize(assetPath);
       }
 
