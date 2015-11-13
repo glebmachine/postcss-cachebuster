@@ -1,12 +1,16 @@
 var url = require('url');
 var fs = require('fs');
+var crypto = require('crypto');
 
 var postcss = require('postcss');
 var path = require('canonical-path');
 
+var checksums = {};
+
 module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
   opts = opts || {};
   opts.imagesPath = opts.imagesPath || '';
+  opts.type = opts.type || 'mtime';
 
   return function (css) {
 
@@ -40,8 +44,24 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
       }
 
       // cachebuster
-      var mtime = fs.statSync(assetPath).mtime;
-      var cachebuster = mtime.getTime().toString(16);
+      var cachebuster = null;
+
+      if (opts.type == 'checksum') {
+        if (checksums[assetPath]) {
+          cachebuster = checksums[assetPath];
+        } else {
+          var data = fs.readFileSync(assetPath).toString();
+          cachebuster = crypto.createHash('md5')
+            .update(data)
+            .digest('hex');
+
+          checksums[assetPath] = cachebuster;
+        }
+
+      } else {
+        var mtime = fs.statSync(assetPath).mtime;
+        cachebuster = mtime.getTime().toString(16);
+      }
 
       // complete url with cachebuster
       if (assetUrl.search) {
