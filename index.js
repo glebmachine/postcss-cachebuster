@@ -7,6 +7,43 @@ var path = require('canonical-path');
 
 var checksums = {};
 
+function createCachebuster(assetPath, type) {
+  var cachebuster = null;
+
+  if (type == 'checksum') {
+    if (checksums[assetPath]) {
+      cachebuster = checksums[assetPath];
+    } else {
+      var data = fs.readFileSync(assetPath).toString();
+      cachebuster = crypto.createHash('md5')
+        .update(data)
+        .digest('hex');
+
+      checksums[assetPath] = cachebuster;
+    }
+
+  } else {
+    var mtime = fs.statSync(assetPath).mtime;
+    cachebuster = mtime.getTime().toString(16);
+  }
+
+  return cachebuster
+}
+
+function resolveUrl(assetUrl, file, imagesPath) {
+  var assetPath = decodeURI(assetUrl.pathname);
+
+  if (/^\//.test(assetUrl.pathname)) {
+    // absolute
+    assetPath = path.join(process.cwd(), imagesPath, assetPath);
+  } else {
+    // relative
+    assetPath = path.join(path.dirname(file), assetPath);
+  }
+
+  return assetPath;
+}
+
 module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
   opts = opts || {};
   opts.imagesPath = opts.imagesPath || '';
@@ -26,60 +63,33 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
         return;
       }
 
-      // only url
-      if (!/url\(('|")?[^'"\)]+('|")?\)/.test(declaration.value)) return;
-
-      var background = /^(.*?)url\(('|")?([^'"\)]+)('|")?\)(.*?)$/.exec(declaration.value);
-      var assetUrl = url.parse(background[3]);
-      var assetPath = decodeURI(assetUrl.pathname);
       var inputPath = url.parse(inputFile);
+      var pattern = /url\(('|")?([^'"\)]+)('|")?\)/g;
 
-      // only locals
-      if (inputPath.host) return;
-      if (assetUrl.pathname.indexOf('//') == 0) return;
-      if (assetUrl.pathname.indexOf(';base64') !== -1) return;
+      declaration.value = declaration.value.replace(pattern, function (match, quote, originalUrl) {
+        var assetUrl = url.parse(originalUrl);
+        quote = quote || '"';
 
-      // resolve path
-      if (/^\//.test(assetUrl.pathname)) {
-        // absolute
-        assetPath = path.normalize(process.cwd()+'/'+opts.imagesPath+'/'+assetPath)
-      } else {
-        // relative
-        assetPath = path.dirname(inputFile)+'/'+assetPath;
-        assetPath = path.normalize(assetPath);
-      }
-
-      // cachebuster
-      var cachebuster = null;
-
-      if (opts.type == 'checksum') {
-        if (checksums[assetPath]) {
-          cachebuster = checksums[assetPath];
-        } else {
-          var data = fs.readFileSync(assetPath).toString();
-          cachebuster = crypto.createHash('md5')
-            .update(data)
-            .digest('hex');
-
-          checksums[assetPath] = cachebuster;
+        // only locals
+        if (assetUrl.host ||
+            assetUrl.pathname.indexOf('//') == 0 ||
+            assetUrl.pathname.indexOf(';base64') !== -1) {
+          return match;
         }
 
-      } else {
-        var mtime = fs.statSync(assetPath).mtime;
-        cachebuster = mtime.getTime().toString(16);
-      }
+        var assetPath = resolveUrl(assetUrl, inputFile, opts.imagesPath);
+        var cachebuster = createCachebuster(assetPath, opts.type);
 
-      // complete url with cachebuster
-      if (assetUrl.search && assetUrl.search.length > 1) {
-        assetUrl.search = assetUrl.search + '&v' + cachebuster;
-      } else {
-        assetUrl.search = '?v' + cachebuster;
-      }
+        // complete url with cachebuster
+        if (assetUrl.search && assetUrl.search.length > 1) {
+          assetUrl.search = assetUrl.search + '&v' + cachebuster;
+        } else {
+          assetUrl.search = '?v' + cachebuster;
+        }
 
-      // replace old value
-      declaration.value = background[1]+"url('"+url.format(assetUrl)+"')"+background[5];
-
-    })
+        return 'url(' + quote + url.format(assetUrl) + quote + ')';
+      });
+    });
 
   };
 });
