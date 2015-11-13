@@ -18,8 +18,12 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
 
     css.walkDecls(function(declaration){
 
-      // only background, background-image declarations
-      if (declaration.prop !== 'background' && declaration.prop !== 'background-image') return;
+      // only background, background-image, font src declarations
+      if (declaration.prop !== 'background' &&
+          declaration.prop !== 'background-image' &&
+          declaration.prop !== 'src') {
+        return;
+      }
 
       // only url
       if (!/url\(('|")?[^'"\)]+('|")?\)/.test(declaration.value)) return;
