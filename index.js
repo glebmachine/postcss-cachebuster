@@ -8,43 +8,6 @@ var path = require('canonical-path');
 
 var checksums = {};
 
-function createCachebuster(assetPath, type) {
-
-  var cachebuster;
-
-  if (type === 'checksum') {
-    if (checksums[assetPath]) {
-      cachebuster = checksums[assetPath];
-    } else {
-      var data = fs.readFileSync(assetPath).toString();
-      cachebuster = crypto.createHash('md5')
-        .update(data)
-        .digest('hex');
-
-      checksums[assetPath] = cachebuster;
-    }
-  } else {
-    var mtime = fs.statSync(assetPath).mtime;
-    cachebuster = mtime.getTime().toString(16);
-  }
-
-  return cachebuster;
-}
-
-function resolveUrl(assetUrl, file, imagesPath) {
-  var assetPath = decodeURI(assetUrl.pathname);
-
-  if (/^\//.test(assetUrl.pathname)) {
-    // absolute
-    assetPath = path.join(process.cwd(), imagesPath, assetPath);
-  } else {
-    // relative
-    assetPath = path.join(path.dirname(file), assetPath);
-  }
-
-  return assetPath;
-}
-
 module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
   var pattern = /url\(('|")?([^'"\)]+)('|")?\)/g;
   var supportedProps = [
@@ -55,13 +18,46 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
   ];
   
   opts = opts || {};
-  opts.imagesPath = opts.imagesPath || '';
+  opts.imagesPath = opts.imagesPath ? process.cwd() + opts.imagesPath : '';
+  opts.cssPath = opts.cssPath ? process.cwd()+opts.cssPath : false;
   opts.type = opts.type || 'mtime';
 
-  return function (css) {
-    var inputFile = css.source.input.file;
+  function createCachebuster(assetPath, type) {
+    var cachebuster;
 
-    css.walkRules(function(declaration){
+    if (type === 'checksum') {
+      if (checksums[assetPath]) {
+        cachebuster = checksums[assetPath];
+      } else {
+        var data = fs.readFileSync(assetPath).toString();
+        cachebuster = crypto.createHash('md5')
+          .update(data)
+          .digest('hex');
+
+        checksums[assetPath] = cachebuster;
+      }
+    } else {
+      var mtime = fs.statSync(assetPath).mtime;
+      cachebuster = mtime.getTime().toString(16);
+    }
+
+    return cachebuster;
+  }
+
+  function resolveUrl(assetUrl, file, imagesPath) {
+    var assetPath = decodeURI(assetUrl.pathname);
+
+    if (/^\//.test(assetUrl.pathname)) {
+      assetPath = path.join(imagesPath, assetPath);
+    } else {
+      assetPath = path.join(opts.cssPath || path.dirname(file), assetPath);
+    }
+    return assetPath;
+  }
+
+  return function (css) {
+    var inputFile = opts.cssPath || css.source.input.file;
+    css.walkDecls(function(declaration){
       // only image and font related declarations
       if (supportedProps.indexOf(declaration.prop)=== -1) {
         return;
