@@ -18,7 +18,7 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
   ];
   
   opts = opts || {};
-  opts.imagesPath = opts.imagesPath ? process.cwd() + opts.imagesPath : '';
+  opts.imagesPath = opts.imagesPath ? process.cwd() + opts.imagesPath : process.cwd();
   opts.cssPath = opts.cssPath ? process.cwd()+opts.cssPath : false;
   opts.type = opts.type || 'mtime';
 
