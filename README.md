@@ -26,3 +26,9 @@
 postcss([ require('postcss-cachebuster') ])
 ```
 See [PostCSS] docs for examples for your environment.
+
+## Options
+
+- `cssPath` - option to redefine relative images resolving directory (by default the same as css file folder)
+- `imagesPath` - variable to define absolute images base path
+- `type` - define cachebuster type, `mtime` my default, allows: 'mtime, checksum' (checksum based on md5)
