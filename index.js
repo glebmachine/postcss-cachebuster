@@ -10,7 +10,7 @@ var checksums = {};
 function createCachebuster(assetPath, type) {
   var cachebuster = null;
 
-  if (type == 'checksum') {
+  if (type === 'checksum') {
     if (checksums[assetPath]) {
       cachebuster = checksums[assetPath];
     } else {
@@ -27,7 +27,7 @@ function createCachebuster(assetPath, type) {
     cachebuster = mtime.getTime().toString(16);
   }
 
-  return cachebuster
+  return cachebuster;
 }
 
 function resolveUrl(assetUrl, file, imagesPath) {
@@ -72,7 +72,7 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
 
         // only locals
         if (assetUrl.host ||
-            assetUrl.pathname.indexOf('//') == 0 ||
+            assetUrl.pathname.indexOf('//') === 0 ||
             assetUrl.pathname.indexOf(';base64') !== -1) {
           return match;
         }
