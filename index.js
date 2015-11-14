@@ -23,7 +23,6 @@ function createCachebuster(assetPath, type) {
 
       checksums[assetPath] = cachebuster;
     }
-
   } else {
     var mtime = fs.statSync(assetPath).mtime;
     cachebuster = mtime.getTime().toString(16);
@@ -47,31 +46,29 @@ function resolveUrl(assetUrl, file, imagesPath) {
 }
 
 module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
+  var pattern = /url\(('|")?([^'"\)]+)('|")?\)/g;
+  var supportedProps = [
+    'background',
+    'background-image',
+    'border-image',
+    'src'
+  ];
+  
   opts = opts || {};
   opts.imagesPath = opts.imagesPath || '';
   opts.type = opts.type || 'mtime';
 
   return function (css) {
-
     var inputFile = css.source.input.file;
 
-    css.walkDecls(function(declaration){
-
-      var supportedProps = [
-        'background',
-        'background-image',
-        'border-image',
-        'src'
-      ];
-
+    css.walkRules(function(declaration){
       // only image and font related declarations
       if (supportedProps.indexOf(declaration.prop)=== -1) {
         return;
       }
 
-      var pattern = /url\(('|")?([^'"\)]+)('|")?\)/g;
-
       declaration.value = declaration.value.replace(pattern, function (match, quote, originalUrl) {
+        
         var assetUrl = url.parse(originalUrl);
         var assetPath = resolveUrl(assetUrl, inputFile, opts.imagesPath);
         quote = quote || '"';
@@ -82,7 +79,6 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
             assetUrl.pathname.indexOf(';base64') !== -1) {
           return match;
         }
-
 
         // file exists
         if (!fs.existsSync(assetPath)) {
