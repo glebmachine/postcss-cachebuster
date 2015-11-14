@@ -35,6 +35,7 @@ See [PostCSS] docs for examples for your environment.
 
 
 ## Contributors
+- Gleb Mikheev (https://github.com/glebmachine)
 - Graham Bates (https://github.com/grahambates)
 - Yusuke Yagyu (https://github.com/gyugyu)
 
