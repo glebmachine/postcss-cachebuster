@@ -8,7 +8,8 @@ var path = require('canonical-path');
 var checksums = {};
 
 function createCachebuster(assetPath, type) {
-  var cachebuster = null;
+
+  var cachebuster;
 
   if (type === 'checksum') {
     if (checksums[assetPath]) {
@@ -55,19 +56,23 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
 
     css.walkDecls(function(declaration){
 
+      var supportedProps = [
+        'background',
+        'background-image',
+        'border-image',
+        'src'
+      ];
+
       // only image and font related declarations
-      if (declaration.prop !== 'background' &&
-          declaration.prop !== 'background-image' &&
-          declaration.prop !== 'border-image' &&
-          declaration.prop !== 'src') {
+      if (supportedProps.indexOf(declaration.prop)=== -1) {
         return;
       }
 
-      var inputPath = url.parse(inputFile);
       var pattern = /url\(('|")?([^'"\)]+)('|")?\)/g;
 
       declaration.value = declaration.value.replace(pattern, function (match, quote, originalUrl) {
         var assetUrl = url.parse(originalUrl);
+        var assetPath = resolveUrl(assetUrl, inputFile, opts.imagesPath);
         quote = quote || '"';
 
         // only locals
@@ -77,7 +82,12 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
           return match;
         }
 
-        var assetPath = resolveUrl(assetUrl, inputFile, opts.imagesPath);
+        // file exists
+        if (!fs.existsSync(assetPath)) {
+          console.log('file unreachable or not exists', assetPath);
+          return;
+        }
+        
         var cachebuster = createCachebuster(assetPath, opts.type);
 
         // complete url with cachebuster
