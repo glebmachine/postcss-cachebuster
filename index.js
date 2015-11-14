@@ -1,6 +1,7 @@
 var url = require('url');
 var fs = require('fs');
 var crypto = require('crypto');
+var chalk = require('chalk');
 
 var postcss = require('postcss');
 var path = require('canonical-path');
@@ -82,12 +83,13 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
           return match;
         }
 
+
         // file exists
         if (!fs.existsSync(assetPath)) {
-          console.log('file unreachable or not exists', assetPath);
-          return;
+          console.log(chalk.yellow('file unreachable or not exists', assetPath));
+          return match;
         }
-        
+
         var cachebuster = createCachebuster(assetPath, opts.type);
 
         // complete url with cachebuster

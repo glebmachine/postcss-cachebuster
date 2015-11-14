@@ -22,13 +22,16 @@
   "homepage": "https://github.com/glebmachine/postcss-cachebuster",
   "dependencies": {
     "canonical-path": "0.0.2",
+    "chalk": "^1.1.1",
     "postcss": "^4.1.13"
   },
   "devDependencies": {
     "chai": "^3.0.0",
     "gulp": "^3.9.0",
     "gulp-eslint": "^0.14.0",
-    "gulp-mocha": "^2.1.2"
+    "gulp-mocha": "^2.1.2",
+    "gulp-postcss": "^6.0.1",
+    "gulp-rename": "^1.2.2"
   },
   "scripts": {
     "test": "gulp"
