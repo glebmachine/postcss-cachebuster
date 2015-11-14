@@ -1,6 +1,6 @@
 {
   "name": "postcss-cachebuster",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "PostCSS plugin added cachebuster to local files based on their datechanged",
   "keywords": [
     "postcss",
