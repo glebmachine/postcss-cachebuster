@@ -23,7 +23,7 @@
   "dependencies": {
     "canonical-path": "0.0.2",
     "chalk": "^1.1.1",
-    "postcss": "^4.1.13"
+    "postcss": "^5.0.12"
   },
   "devDependencies": {
     "chai": "^3.0.0",
