@@ -8,24 +8,39 @@
 [dm-img]:  https://david-dm.org/glebmachine/postcss-cachebuster.svg
 [dm]:      https://david-dm.org/glebmachine/postcss-cachebuster
 
+
+## Input css example
 ```css
 .foo {
-  /* Input example */
-  background-image : url('../images/index/logo.png')
+  background-image : url('../images/index/logo.png');
+  behavior : url('../behaviors/backgroundsize.min.htc');
+}
+@font-face {
+  font-family: 'My font';
+  src: url('fonts/myfont.ttf');
 }
 ```
 
+## Output css example
 ```css
 .foo {
-  /* Output example */
-    background-image : url('../images/index/logo.png?v14f32a475b8')
+  background-image : url('../images/index/logo.png?v14f32a475b8')
+  behavior : url('../behaviors/backgroundsize.min.htc?v15f55a666c2');
+}
+@font-face {
+  font-family: 'My font';
+  src: url('fonts/myfont.ttf?v32f14a88dcf');
 }
 ```
 
-## Usage
-
+## Configure
 ```js
-postcss([ require('postcss-cachebuster') ])
+postcss([ 
+  require('postcss-cachebuster')({
+    imagesPath : '/images', 
+    cssPath : '/stylesheets'
+  }) 
+])
 ```
 See [PostCSS] docs for examples for your environment.
 
