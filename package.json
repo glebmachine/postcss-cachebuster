@@ -1,14 +1,18 @@
 {
   "name": "postcss-cachebuster",
-  "version": "0.1.0",
-  "description": "PostCSS plugin added cachebuster to local files based on their datechanged",
+  "version": "0.1.1",
+  "description": "Cachebusting all local files in css",
   "keywords": [
     "postcss",
     "css",
     "postcss-plugin",
     "cachebuster",
     "caching",
-    "cachefile"
+    "cachefile",
+    "cache",
+    "control",
+    "network",
+    "optimize",
   ],
   "author": "Gleb Mikheev <glebmachine@gmail.com>",
   "license": "MIT",
