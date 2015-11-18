@@ -1,10 +1,12 @@
-# PostCSS Cachebuster [![Build Status][ci-img]][ci]
+# PostCSS Cachebuster [![Build Status][ci-img]][ci][![dependencies][dm-img]][dm]
 
 [PostCSS] plugin added cachebuster to local files based on their datechanged.
 
 [PostCSS]: https://github.com/postcss/postcss
 [ci-img]:  https://travis-ci.org/glebmachine/postcss-cachebuster.svg
 [ci]:      https://travis-ci.org/glebmachine/postcss-cachebuster
+[dm-img]:  https://david-dm.org/glebmachine/postcss-cachebuster.svg
+[dm]:      https://david-dm.org/glebmachine/postcss-cachebuster
 
 ```css
 .foo {
