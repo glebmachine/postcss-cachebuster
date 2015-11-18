@@ -1,4 +1,6 @@
 .gitignore
+.jshintrc
+.eslintrc
 
 node_modules/
 
