@@ -16,6 +16,7 @@ var assert = function (input, output, opts, done) {
 
 describe('postcss-cachebuster', function () {
     var horseMtime = fs.statSync('./test/images/horse.jpg').mtime.getTime().toString(16);
+    var cssMtime = fs.statSync('./test/css/styles.css').mtime.getTime().toString(16);
 
     it('Process image, with relative path', function (done) {
         assert('a { background-image : url("images/horse.jpg"); }', 
@@ -44,6 +45,12 @@ describe('postcss-cachebuster', function () {
     it('Skip unresolved images', function (done) {
         assert('a { background-image : url("there/is/no/image.jpg"); }', 
                'a { background-image : url("there/is/no/image.jpg"); }', 
+               { imagesPath : '/test/'}, done);
+    });
+
+    it('Add cachebuster to import css file', function (done) {
+        assert('@import url("/css/styles.css");', 
+               '@import url("/css/styles.css?v'+cssMtime+'");', 
                { imagesPath : '/test/'}, done);
     });
 

@@ -57,17 +57,43 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
 
   return function (css) {
     var inputFile = opts.cssPath || css.source.input.file;
-    css.walkDecls(function(declaration){
+
+    css.walkAtRules('import', function walkThroughtImports(atrule) {
+      var results = pattern.exec(atrule.params);
+      var match = results[0];
+      var quote = results[1] || '"';
+      var originalUrl = results[2];
+
+      var assetUrl = url.parse(originalUrl);
+      var assetPath = resolveUrl(assetUrl, inputFile, opts.imagesPath);
+
+      // file exists
+      if (!fs.existsSync(assetPath)) {
+        console.log(chalk.yellow('file unreachable or not exists', assetPath));
+        return match;
+      }
+
+      // complete url with cachebuster
+      var cachebuster = createCachebuster(assetPath, opts.type);
+      if (assetUrl.search && assetUrl.search.length > 1) {
+        assetUrl.search = assetUrl.search + '&v' + cachebuster;
+      } else {
+        assetUrl.search = '?v' + cachebuster;
+      }
+
+      atrule.params = 'url(' + quote + url.format(assetUrl) + quote + ')';
+    });
+
+    css.walkDecls(function walkThroughtDeclarations(declaration){
       // only image and font related declarations
       if (supportedProps.indexOf(declaration.prop)=== -1) {
         return;
       }
 
       declaration.value = declaration.value.replace(pattern, function (match, quote, originalUrl) {
+        quote = quote || '"';
         
         var assetUrl = url.parse(originalUrl);
-        var assetPath = resolveUrl(assetUrl, inputFile, opts.imagesPath);
-        quote = quote || '"';
 
         // only locals
         if (assetUrl.host ||
@@ -76,15 +102,17 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
           return match;
         }
 
+        var assetPath = resolveUrl(assetUrl, inputFile, opts.imagesPath);
+
         // file exists
         if (!fs.existsSync(assetPath)) {
           console.log(chalk.yellow('file unreachable or not exists', assetPath));
           return match;
         }
 
-        var cachebuster = createCachebuster(assetPath, opts.type);
 
         // complete url with cachebuster
+        var cachebuster = createCachebuster(assetPath, opts.type);
         if (assetUrl.search && assetUrl.search.length > 1) {
           assetUrl.search = assetUrl.search + '&v' + cachebuster;
         } else {
