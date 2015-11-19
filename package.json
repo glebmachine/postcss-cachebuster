@@ -12,7 +12,7 @@
     "cache",
     "control",
     "network",
-    "optimize",
+    "optimize"
   ],
   "author": "Gleb Mikheev <glebmachine@gmail.com>",
   "license": "MIT",
