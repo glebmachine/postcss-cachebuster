@@ -14,6 +14,7 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
     'background',
     'background-image',
     'border-image',
+    'behavior',
     'src'
   ];
   
