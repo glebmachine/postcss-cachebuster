@@ -11,6 +11,7 @@
 
 ## Input css example
 ```css
+@import url("/css/styles.css");
 .foo {
   background-image : url('../images/index/logo.png');
   behavior : url('../behaviors/backgroundsize.min.htc');
@@ -23,6 +24,7 @@
 
 ## Output css example
 ```css
+@import url("/css/styles.css?v66f22a33fff");
 .foo {
   background-image : url('../images/index/logo.png?v14f32a475b8')
   behavior : url('../behaviors/backgroundsize.min.htc?v15f55a666c2');
