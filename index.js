@@ -70,7 +70,7 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
 
       // file exists
       if (!fs.existsSync(assetPath)) {
-        console.log(chalk.yellow('file unreachable or not exists', assetPath));
+        console.log('Cachebuster: ',chalk.yellow('file unreachable or not exists', assetPath));
         return match;
       }
 
@@ -107,7 +107,7 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
 
         // file exists
         if (!fs.existsSync(assetPath)) {
-          console.log(chalk.yellow('file unreachable or not exists', assetPath));
+          console.log(chalk.yellow('Cachebuster: ', 'file unreachable or not exists', assetPath));
           return match;
         }
 
