@@ -1,7 +1,6 @@
 var url = require('url');
 var fs = require('fs');
 var crypto = require('crypto');
-var chalk = require('chalk');
 
 var postcss = require('postcss');
 var path = require('canonical-path');
@@ -26,7 +25,9 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
   function createCachebuster(assetPath, type) {
     var cachebuster;
 
-    if (type === 'checksum') {
+    if (typeof type === 'function') {
+      cachebuster = type(assetPath);
+    } else if (type === 'checksum') {
       if (checksums[assetPath]) {
         cachebuster = checksums[assetPath];
       } else {
@@ -59,28 +60,28 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
   return function (css) {
     var inputFile = opts.cssPath || css.source.input.file;
 
-    css.walkAtRules('import', function walkThroughtImports(atrule) {
-      var results = pattern.exec(atrule.params);
-      var match = results[0];
-      var quote = results[1] || '"';
-      var originalUrl = results[2];
-
-      var assetUrl = url.parse(originalUrl);
+    function updateAssetUrl(assetUrl) {
       var assetPath = resolveUrl(assetUrl, inputFile, opts.imagesPath);
-
-      // file exists
-      if (!fs.existsSync(assetPath)) {
-        console.log('Cachebuster: ',chalk.yellow('file unreachable or not exists', assetPath));
-        return match;
-      }
 
       // complete url with cachebuster
       var cachebuster = createCachebuster(assetPath, opts.type);
-      if (assetUrl.search && assetUrl.search.length > 1) {
+      if (typeof opts.type === 'function') {
+        assetUrl.pathname = cachebuster;
+      } else if (assetUrl.search && assetUrl.search.length > 1) {
         assetUrl.search = assetUrl.search + '&v' + cachebuster;
       } else {
         assetUrl.search = '?v' + cachebuster;
       }
+    }
+
+    css.walkAtRules('import', function walkThroughtImports(atrule) {
+      var results = pattern.exec(atrule.params);
+      var quote = results[1] || '"';
+      var originalUrl = results[2];
+
+      var assetUrl = url.parse(originalUrl);
+
+      updateAssetUrl(assetUrl);
 
       atrule.params = 'url(' + quote + url.format(assetUrl) + quote + ')';
     });
@@ -103,22 +104,7 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
           return match;
         }
 
-        var assetPath = resolveUrl(assetUrl, inputFile, opts.imagesPath);
-
-        // file exists
-        if (!fs.existsSync(assetPath)) {
-          console.log(chalk.yellow('Cachebuster: ', 'file unreachable or not exists', assetPath));
-          return match;
-        }
-
-
-        // complete url with cachebuster
-        var cachebuster = createCachebuster(assetPath, opts.type);
-        if (assetUrl.search && assetUrl.search.length > 1) {
-          assetUrl.search = assetUrl.search + '&v' + cachebuster;
-        } else {
-          assetUrl.search = '?v' + cachebuster;
-        }
+        updateAssetUrl(assetUrl);
 
         return 'url(' + quote + url.format(assetUrl) + quote + ')';
       });
