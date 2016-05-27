@@ -1,4 +1,4 @@
-## 0.1.3 (2015-11-19)
+## 0.1.3 (2016-05-27)
 
 - `type` can be defined as function. 
 Thanks for Jackson Ray Hamilton [@jacksonrayhamilton](http://github.com/jacksonrayhamilton)
