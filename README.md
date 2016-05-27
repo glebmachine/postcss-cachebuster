@@ -50,11 +50,13 @@ See [PostCSS] docs for examples for your environment.
 
 - `cssPath` - option to redefine relative images resolving directory (by default the same as css file folder)
 - `imagesPath` - variable to define absolute images base path
-- `type` - define cachebuster type, `mtime` my default, allows: 'mtime, checksum' (checksum based on md5)
+- `type` - define cachebuster type, `mtime` by default, allows: `mtime`, `checksum` (checksum based on md5),
+  or a function which receives the absolute path to the file as an argument and whose return value becomes
+  the url pathname.
 
 
 ## Contributors
 - Gleb Mikheev (https://github.com/glebmachine)
 - Graham Bates (https://github.com/grahambates)
 - Yusuke Yagyu (https://github.com/gyugyu)
-
+- Jackson Ray Hamilton (https://github.com/jacksonrayhamilton)
