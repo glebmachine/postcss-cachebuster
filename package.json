@@ -26,6 +26,7 @@
   "homepage": "https://github.com/glebmachine/postcss-cachebuster",
   "dependencies": {
     "canonical-path": "0.0.2",
+    "chalk": "^1.1.1",
     "path": "^0.12.7",
     "postcss": "^5.0.12"
   },

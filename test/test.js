@@ -1,5 +1,6 @@
 var postcss = require('postcss');
 var expect  = require('chai').expect;
+var path = require('path');
 var plugin = require('../');
 var fs = require('fs');
 
@@ -67,6 +68,15 @@ describe('postcss-cachebuster', function () {
         assert('@import url("/css/styles.css");', 
                '@import url("/css/styles.css?v'+cssMtime+'");', 
                { imagesPath : '/test/'}, done);
+    });
+
+    it('Change url with function', function (done) {
+        assert('a { background-image : url("files/horse.jpg"); }',
+               'a { background-image : url("files/horse.abc123.jpg"); }',
+               { type : function (assetPath) {
+                   expect(assetPath).to.equal(path.join(__dirname, 'files/horse.jpg'));
+                   return 'files/horse.abc123.jpg';
+               }, cssPath : '/test/'}, done);
     });
 
 });
