@@ -46,5 +46,5 @@
   "scripts": {
     "lint": "eslint --fix index.js",
     "test": "gulp"
-  },
+  }
 }
