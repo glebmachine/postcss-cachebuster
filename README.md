@@ -1,12 +1,6 @@
-# PostCSS Cachebuster [![Build Status][ci-img]][ci][![dependencies][dm-img]][dm]
+# PostCSS Cachebuster [![Build Status](https://travis-ci.org/glebmachine/postcss-cachebuster.svg?branch=master)](https://travis-ci.org/glebmachine/postcss-cachebuster) [![npm version](https://badge.fury.io/js/postcss-cachebuster.svg)](http://badge.fury.io/js/postcss-cachebuster)
 
 [PostCSS] plugin added cachebuster to local files based on their datechanged.
-
-[PostCSS]: https://github.com/postcss/postcss
-[ci-img]:  https://travis-ci.org/glebmachine/postcss-cachebuster.svg
-[ci]:      https://travis-ci.org/glebmachine/postcss-cachebuster
-[dm-img]:  https://david-dm.org/glebmachine/postcss-cachebuster.svg
-[dm]:      https://david-dm.org/glebmachine/postcss-cachebuster
 
 
 ## Input css example
