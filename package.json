@@ -1,44 +1,50 @@
 {
-    "name": "postcss-cachebuster",
-    "version": "0.1.3",
-    "description": "Cachebusting all local files in css",
-    "keywords": [
-        "postcss",
-        "css",
-        "postcss-plugin",
-        "cachebuster",
-        "caching",
-        "cachefile",
-        "cache",
-        "control",
-        "network",
-        "optimize"
-    ],
-    "author": "Gleb Mikheev <glebmachine@gmail.com>",
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/glebmachine/postcss-cachebuster.git"
-    },
-    "bugs": {
-        "url": "https://github.com/glebmachine/postcss-cachebuster/issues"
-    },
-    "homepage": "https://github.com/glebmachine/postcss-cachebuster",
-    "dependencies": {
-        "canonical-path": "0.0.2",
-        "chalk": "^1.1.1",
-        "path": "^0.12.7",
-        "postcss": "^5.0.12"
-    },
-    "devDependencies": {
-        "chai": "^3.0.0",
-        "gulp": "^3.9.0",
-        "gulp-eslint": "^0.14.0",
-        "gulp-mocha": "^2.1.2",
-        "gulp-postcss": "^6.0.1",
-        "gulp-rename": "^1.2.2"
-    },
-    "scripts": {
-        "test": "gulp"
-    }
+  "name": "postcss-cachebuster",
+  "version": "0.1.3",
+  "description": "Cachebusting all local files in css",
+  "keywords": [
+    "postcss",
+    "css",
+    "postcss-plugin",
+    "cachebuster",
+    "caching",
+    "cachefile",
+    "cache",
+    "control",
+    "network",
+    "optimize"
+  ],
+  "author": "Gleb Mikheev <glebmachine@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/glebmachine/postcss-cachebuster.git"
+  },
+  "bugs": {
+    "url": "https://github.com/glebmachine/postcss-cachebuster/issues"
+  },
+  "homepage": "https://github.com/glebmachine/postcss-cachebuster",
+  "dependencies": {
+    "canonical-path": "0.0.2",
+    "chalk": "^1.1.1",
+    "path": "^0.12.7",
+    "postcss": "^5.0.12"
+  },
+  "devDependencies": {
+    "chai": "^3.0.0",
+    "git-hooks": "1.0.2",
+    "gulp": "^3.9.0",
+    "gulp-eslint": "^0.14.0",
+    "gulp-mocha": "^2.1.2",
+    "gulp-postcss": "^6.0.1",
+    "gulp-rename": "^1.2.2",
+    "eslint": "2.12.0",
+    "eslint-config-airbnb": "9.0.1",
+    "eslint-plugin-import": "1.9.2",
+    "eslint-watch": "2.1.11"
+  },
+  "scripts": {
+    "lint": "eslint --fix index.js",
+    "test": "gulp"
+  },
 }

@@ -17,7 +17,7 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
     'behavior',
     'src'
   ];
-  
+
   opts = opts || {};
   opts.imagesPath = opts.imagesPath ? process.cwd() + opts.imagesPath : process.cwd();
   opts.cssPath = opts.cssPath ? process.cwd()+opts.cssPath : false;
@@ -99,7 +99,7 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
 
       declaration.value = declaration.value.replace(pattern, function (match, quote, originalUrl) {
         quote = quote || '"';
-        
+
         var assetUrl = url.parse(originalUrl);
 
         // only locals
@@ -114,6 +114,5 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
         return 'url(' + quote + url.format(assetUrl) + quote + ')';
       });
     });
-
   };
 });
