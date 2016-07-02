@@ -38,7 +38,7 @@
     "eslint-watch": "2.1.11",
     "git-hooks": "1.0.2",
     "gulp": "^3.9.0",
-    "gulp-eslint": "^0.14.0",
+    "gulp-eslint": "^3.0.0",
     "gulp-mocha": "^2.1.2",
     "gulp-postcss": "^6.0.1",
     "gulp-rename": "^1.2.2"
