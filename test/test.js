@@ -70,6 +70,12 @@ describe('postcss-cachebuster', function () {
                { imagesPath : '/test/'}, done);
     });
 
+    it('Add cachebuster to all imports in the css file', function (done) {
+        assert('@import url("/css/styles.css");@import url("/css/styles.css");', 
+               '@import url("/css/styles.css?v'+cssMtime+'");@import url("/css/styles.css?v'+cssMtime+'");', 
+               { imagesPath : '/test/'}, done);
+    });
+
     it('Change url with function', function (done) {
         assert('a { background-image : url("files/horse.jpg"); }',
                'a { background-image : url("files/horse.abc123.jpg"); }',
