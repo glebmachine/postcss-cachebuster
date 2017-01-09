@@ -80,6 +80,7 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
     }
 
     css.walkAtRules('import', function walkThroughtImports(atrule) {
+      pattern.lastIndex = 0;
       var results = pattern.exec(atrule.params);
       var quote = results[1] || '"';
       var originalUrl = results[2];
