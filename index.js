@@ -22,6 +22,7 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
   opts.imagesPath = opts.imagesPath ? process.cwd() + opts.imagesPath : process.cwd();
   opts.cssPath = opts.cssPath ? process.cwd()+opts.cssPath : false;
   opts.type = opts.type || 'mtime';
+  opts.paramName = opts.paramName || 'v';
 
   function createCachebuster(assetPath, type) {
     var cachebuster;
@@ -73,9 +74,9 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
       } else if (typeof opts.type === 'function') {
         assetUrl.pathname = cachebuster;
       } else if (assetUrl.search && assetUrl.search.length > 1) {
-        assetUrl.search = assetUrl.search + '&v' + cachebuster;
+        assetUrl.search = assetUrl.search + '&' + opts.paramName + cachebuster;
       } else {
-        assetUrl.search = '?v' + cachebuster;
+        assetUrl.search = '?' + opts.paramName + cachebuster;
       }
     }
 
