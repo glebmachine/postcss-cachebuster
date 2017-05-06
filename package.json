@@ -28,7 +28,7 @@
     "canonical-path": "0.0.2",
     "chalk": "^1.1.1",
     "path": "^0.12.7",
-    "postcss": "^5.0.12"
+    "postcss": "^6.0.0"
   },
   "devDependencies": {
     "chai": "^3.0.0",
