@@ -79,8 +79,9 @@ describe('postcss-cachebuster', function () {
     it('Change url with function', function (done) {
         assert('a { background-image : url("files/horse.jpg"); }',
                'a { background-image : url("files/horse.abc123.jpg"); }',
-               { type : function (assetPath) {
+               { type : function (assetPath, origPath) {
                    expect(assetPath).to.equal(path.join(__dirname, 'files/horse.jpg'));
+                   expect(origPath).to.equal('files/horse.jpg');
                    return 'files/horse.abc123.jpg';
                }, cssPath : '/test/'}, done);
     });
