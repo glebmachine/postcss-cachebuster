@@ -24,11 +24,11 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
   opts.type = opts.type || 'mtime';
   opts.paramName = opts.paramName || 'v';
 
-  function createCachebuster(assetPath, type) {
+  function createCachebuster(assetPath, origPath, type) {
     var cachebuster;
 
     if (typeof type === 'function') {
-      cachebuster = type(assetPath);
+      cachebuster = type(assetPath, origPath);
     } else if (!fs.existsSync(assetPath)) {
       console.log('Cachebuster:', chalk.yellow('file unreachable or not exists', assetPath));
     } else if (type === 'checksum') {
@@ -68,7 +68,7 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
       var assetPath = resolveUrl(assetUrl, inputFile, opts.imagesPath);
 
       // complete url with cachebuster
-      var cachebuster = createCachebuster(assetPath, opts.type);
+      var cachebuster = createCachebuster(assetPath, assetUrl.pathname, opts.type);
       if (!cachebuster) {
         return;
       } else if (typeof opts.type === 'function') {
