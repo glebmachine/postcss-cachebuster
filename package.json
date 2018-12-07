@@ -1,6 +1,6 @@
 {
   "name": "postcss-cachebuster",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Cachebusting all local files in css",
   "keywords": [
     "postcss",
