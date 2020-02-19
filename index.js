@@ -35,7 +35,7 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
       if (checksums[assetPath]) {
         cachebuster = checksums[assetPath];
       } else {
-        var data = fs.readFileSync(assetPath).toString();
+        var data = fs.readFileSync(assetPath);
         cachebuster = crypto.createHash('md5')
           .update(data)
           .digest('hex');
