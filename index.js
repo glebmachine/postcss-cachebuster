@@ -23,6 +23,7 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
   opts.cssPath = opts.cssPath ? process.cwd()+opts.cssPath : false;
   opts.type = opts.type || 'mtime';
   opts.paramName = opts.paramName || 'v';
+  opts.hashAlgorithm = opts.hashAlgorithm || 'md5';
 
   function createCachebuster(assetPath, origPath, type) {
     var cachebuster;
@@ -36,7 +37,7 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
         cachebuster = checksums[assetPath];
       } else {
         var data = fs.readFileSync(assetPath);
-        cachebuster = crypto.createHash('md5')
+        cachebuster = crypto.createHash(opts.hashAlgorithm)
           .update(data)
           .digest('hex');
 
