@@ -24,6 +24,8 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
   opts.type = opts.type || 'mtime';
   opts.paramName = opts.paramName || 'v';
   opts.hashAlgorithm = opts.hashAlgorithm || 'md5';
+  supportedProps = opts.supportedProps || supportedProps;
+  supportedProps = supportedProps.concat(opts.additionalProps || []);
 
   function createCachebuster(assetPath, origPath, type) {
     var cachebuster;
