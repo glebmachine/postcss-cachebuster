@@ -44,9 +44,12 @@ See [PostCSS] docs for examples for your environment.
 
 - `cssPath` - option to redefine relative images resolving directory (by default the same as css file folder)
 - `imagesPath` - variable to define absolute images base path
-- `type` - define cachebuster type, `mtime` by default, allows: `mtime`, `checksum` (checksum based on md5),
+- `type` - define cachebuster type, `mtime` by default, allows: `mtime`, `checksum` (checksum based on a hash algorithm),
   or a function which receives the absolute path to the file as an argument and whose return value becomes
   the url pathname.
+- `hashAlgorithm` - the hash algorithm to use when `type` is set to `checksum` (defaults to `md5`).
+  See the [crypto.createHash()](https://nodejs.org/api/crypto.html#crypto_crypto_createhash_algorithm_options)
+  documentation for information about available hash algorithms.
 
 
 ## Contributors
