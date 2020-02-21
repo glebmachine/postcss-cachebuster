@@ -47,6 +47,11 @@ See [PostCSS] docs for examples for your environment.
 - `type` - define cachebuster type, `mtime` by default, allows: `mtime`, `checksum` (checksum based on a hash algorithm),
   or a function which receives the absolute path to the file as an argument and whose return value becomes
   the url pathname.
+- `paramName` - prefix for the cachebuster value added to an asset's query
+  string (defaults to `v`). The default of `v` produces URLs like
+  `images/horse.jpg?v32f14a88dcf`. You can include an `=` to format it as a
+  key/value parameter. For example, setting `paramName` to `v=` could produce
+  URLs like `images/horse.jpg?v=32f14a88dcf`.
 - `hashAlgorithm` - the hash algorithm to use when `type` is set to `checksum` (defaults to `md5`).
   See the [crypto.createHash()](https://nodejs.org/api/crypto.html#crypto_crypto_createhash_algorithm_options)
   documentation for information about available hash algorithms.
