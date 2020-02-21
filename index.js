@@ -33,15 +33,19 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
     } else if (!fs.existsSync(assetPath)) {
       console.log('Cachebuster:', chalk.yellow('file unreachable or not exists', assetPath));
     } else if (type === 'checksum') {
-      if (checksums[assetPath]) {
-        cachebuster = checksums[assetPath];
+      // Used to distinguish between different hash algorithms among the
+      // remembered checksum values in the `checksums` array.
+      var checksumKey = [assetPath, opts.hashAlgorithm].join('|');
+      
+      if (checksums[checksumKey]) {
+        cachebuster = checksums[checksumKey];
       } else {
         var data = fs.readFileSync(assetPath);
         cachebuster = crypto.createHash(opts.hashAlgorithm)
           .update(data)
           .digest('hex');
 
-        checksums[assetPath] = cachebuster;
+        checksums[checksumKey] = cachebuster;
       }
     } else {
       var mtime = fs.statSync(assetPath).mtime;
