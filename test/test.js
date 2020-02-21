@@ -1,14 +1,22 @@
 var postcss = require('postcss');
-var expect  = require('chai').expect;
+var chai = require('chai');
+var expect  = chai.expect;
 var path = require('path');
 var plugin = require('../');
 var fs = require('fs');
+var sinon = require('sinon');
+var sinonChai = require('sinon-chai');
+var chalk = require('chalk');
 
+chai.use(sinonChai);
 
-var assert = function (input, output, opts, done) {
+var assert = function (input, output, opts, done, expectations) {
     postcss([ plugin(opts) ]).process(input).then(function (result) {
         expect(result.css).to.eql(output);
         expect(result.warnings()).to.be.empty;
+        if (expectations) {
+          expectations();
+        }
         done();
     }).catch(function (error) {
         done(error);
@@ -47,9 +55,15 @@ describe('postcss-cachebuster', function () {
     });
 
     it('Skip unresolved images', function (done) {
+        sinon.spy(console, 'log');
         assert('a { background-image : url("there/is/no/image.jpg"); }', 
                'a { background-image : url("there/is/no/image.jpg"); }', 
-               { imagesPath : '/test/'}, done);
+               { imagesPath : '/test/'}, done, function() {
+                   expect(console.log).to.be.calledOnceWith('Cachebuster:',
+                                                            chalk.yellow('file unreachable or not exists',
+                                                                         'there/is/no/image.jpg'));
+                   console.log.restore();
+               });
     });
 
     it('Process font file', function (done) {
