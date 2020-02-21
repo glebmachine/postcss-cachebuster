@@ -112,4 +112,16 @@ describe('postcss-cachebuster', function () {
                { type : 'checksum', hashAlgorithm : 'sha1', cssPath : '/test/'}, done);
     });
 
+    it('Skip unrecognized CSS property', function (done) {
+        assert('a { mask-image : url("/files/horse.jpg"); }',
+               'a { mask-image : url("/files/horse.jpg"); }',
+               { imagesPath : '/test/'}, done);
+    });
+
+    it('Add cachebuster for additional specified CSS property', function (done) {
+        assert('a { mask-image : url("/files/horse.jpg"); }',
+               'a { mask-image : url("/files/horse.jpg?v'+horseMtime+'"); }', 
+               { imagesPath : '/test/', additionalProps: ['mask-image']}, done);
+    });
+
 });
