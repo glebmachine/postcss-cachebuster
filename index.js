@@ -67,7 +67,7 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
   }
 
   return function (css) {
-    var inputFile = opts.cssPath || css.source.input.file;
+    var inputFile = opts.cssPath || css.source.input.file || '';
 
     function updateAssetUrl(assetUrl) {
       var assetPath = resolveUrl(assetUrl, inputFile, opts.imagesPath);
