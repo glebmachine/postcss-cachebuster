@@ -85,5 +85,17 @@ describe('postcss-cachebuster', function () {
                    return 'files/horse.abc123.jpg';
                }, cssPath : '/test/'}, done);
     });
+    
+    it('Change url with default checksum', function (done) {
+        assert('a { background-image : url("files/horse.jpg"); }',
+               'a { background-image : url("files/horse.jpg?vac17ceac5567ecf01eab7c474b3b8426"); }',
+               { type : 'checksum', cssPath : '/test/'}, done);
+    });
+    
+    it('Change url with checksum using specified hash algorithm', function (done) {
+        assert('a { background-image : url("files/horse.jpg"); }',
+               'a { background-image : url("files/horse.jpg?v8a88fc3de434b972f5bebdcd33474cc2259310c1"); }',
+               { type : 'checksum', hashAlgorithm : 'sha1', cssPath : '/test/'}, done);
+    });
 
 });
