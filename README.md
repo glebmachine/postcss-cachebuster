@@ -55,7 +55,45 @@ See [PostCSS] docs for examples for your environment.
 - `hashAlgorithm` - the hash algorithm to use when `type` is set to `checksum` (defaults to `md5`).
   See the [crypto.createHash()](https://nodejs.org/api/crypto.html#crypto_crypto_createhash_algorithm_options)
   documentation for information about available hash algorithms.
+- `additionalProps` - array of additional CSS properties to support
+- `supportedProps` - replacement array of supported CSS properties (see below
+  for the default list of supported properties).
 
+Default supported properties:
+
+- `background`
+- `background-image`
+- `border-image`
+- `behavior`
+- `src`
+
+Add to this list by setting the `additionalProps` configuration option.
+To add support for `mask-image` properties, for example:
+
+```js
+postcss([ 
+  require('postcss-cachebuster')({
+    additionalProps : [
+      'mask-image',
+      '-webkit-mask-image'
+    ]
+  })
+])
+```
+
+Replace the default list by setting the `supportedProps` configuration option.
+To limit the cachbusting to background images only, for example:
+
+```js
+postcss([ 
+  require('postcss-cachebuster')({
+    supportedProps : [
+      'background',
+      'background-image'
+    ]
+  })
+])
+```
 
 ## Contributors
 - Gleb Mikheev (https://github.com/glebmachine)
