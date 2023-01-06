@@ -20,7 +20,7 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
 
   opts = opts || {};
   opts.imagesPathResolved = opts.imagesPath ? process.cwd() + opts.imagesPath : process.cwd();
-  opts.cssPathResolved = opts.cssPath ? process.cwd() + opts.cssPath : false;
+  opts.cssPathResolved = opts.cssPath ? process.cwd()+opts.cssPath : false;
   opts.type = opts.type || 'mtime';
   opts.paramName = opts.paramName || 'v';
   opts.hashAlgorithm = opts.hashAlgorithm || 'md5';
@@ -38,7 +38,7 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
       // Used to distinguish between different hash algorithms among the
       // remembered checksum values in the `checksums` array.
       var checksumKey = [assetPath, opts.hashAlgorithm].join('|');
-
+      
       if (checksums[checksumKey]) {
         cachebuster = checksums[checksumKey];
       } else {
@@ -97,8 +97,8 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
 
       // only locals
       if (assetUrl.host ||
-        assetUrl.pathname.indexOf('//') === 0 ||
-        assetUrl.pathname.indexOf(';base64') !== -1) {
+          assetUrl.pathname.indexOf('//') === 0 ||
+          assetUrl.pathname.indexOf(';base64') !== -1) {
         return match;
       }
 
@@ -107,9 +107,9 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
       atrule.params = 'url(' + quote + url.format(assetUrl) + quote + ')';
     });
 
-    css.walkDecls(function walkThroughtDeclarations(declaration) {
+    css.walkDecls(function walkThroughtDeclarations(declaration){
       // only image and font related declarations
-      if (supportedProps.indexOf(declaration.prop) === -1) {
+      if (supportedProps.indexOf(declaration.prop)=== -1) {
         return;
       }
 
@@ -120,8 +120,8 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
 
         // only locals
         if (assetUrl.host ||
-          assetUrl.pathname.indexOf('//') === 0 ||
-          assetUrl.pathname.indexOf(';base64') !== -1) {
+            assetUrl.pathname.indexOf('//') === 0 ||
+            assetUrl.pathname.indexOf(';base64') !== -1) {
           return match;
         }
 
