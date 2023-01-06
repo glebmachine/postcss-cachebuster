@@ -99,7 +99,7 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
       if (assetUrl.host ||
         assetUrl.pathname.indexOf('//') === 0 ||
         assetUrl.pathname.indexOf(';base64') !== -1) {
-        return;
+        return match;
       }
 
       updateAssetUrl(assetUrl);
