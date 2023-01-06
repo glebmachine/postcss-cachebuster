@@ -95,6 +95,13 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
 
       var assetUrl = url.parse(originalUrl);
 
+      // only locals
+      if (assetUrl.host ||
+        assetUrl.pathname.indexOf('//') === 0 ||
+        assetUrl.pathname.indexOf(';base64') !== -1) {
+        return;
+      }
+
       updateAssetUrl(assetUrl);
 
       atrule.params = 'url(' + quote + url.format(assetUrl) + quote + ')';
