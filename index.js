@@ -19,8 +19,8 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
   ];
 
   opts = opts || {};
-  opts.imagesPath = opts.imagesPath ? process.cwd() + opts.imagesPath : process.cwd();
-  opts.cssPath = opts.cssPath ? process.cwd()+opts.cssPath : false;
+  opts.imagesPathResolved = opts.imagesPath ? process.cwd() + opts.imagesPath : process.cwd();
+  opts.cssPathResolved = opts.cssPath ? process.cwd() + opts.cssPath : false;
   opts.type = opts.type || 'mtime';
   opts.paramName = opts.paramName || 'v';
   opts.hashAlgorithm = opts.hashAlgorithm || 'md5';
@@ -38,7 +38,7 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
       // Used to distinguish between different hash algorithms among the
       // remembered checksum values in the `checksums` array.
       var checksumKey = [assetPath, opts.hashAlgorithm].join('|');
-      
+
       if (checksums[checksumKey]) {
         cachebuster = checksums[checksumKey];
       } else {
@@ -63,16 +63,16 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
     if (/^\//.test(assetUrl.pathname)) {
       assetPath = path.join(imagesPath, assetPath);
     } else {
-      assetPath = path.join(opts.cssPath || path.dirname(file), assetPath);
+      assetPath = path.join(opts.cssPathResolved || path.dirname(file), assetPath);
     }
     return assetPath;
   }
 
   return function (css) {
-    var inputFile = opts.cssPath || css.source.input.file || '';
+    var inputFile = opts.cssPathResolved || css.source.input.file || '';
 
     function updateAssetUrl(assetUrl) {
-      var assetPath = resolveUrl(assetUrl, inputFile, opts.imagesPath);
+      var assetPath = resolveUrl(assetUrl, inputFile, opts.imagesPathResolved);
 
       // complete url with cachebuster
       var cachebuster = createCachebuster(assetPath, assetUrl.pathname, opts.type);
@@ -100,9 +100,9 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
       atrule.params = 'url(' + quote + url.format(assetUrl) + quote + ')';
     });
 
-    css.walkDecls(function walkThroughtDeclarations(declaration){
+    css.walkDecls(function walkThroughtDeclarations(declaration) {
       // only image and font related declarations
-      if (supportedProps.indexOf(declaration.prop)=== -1) {
+      if (supportedProps.indexOf(declaration.prop) === -1) {
         return;
       }
 
@@ -113,8 +113,8 @@ module.exports = postcss.plugin('postcss-cachebuster', function (opts) {
 
         // only locals
         if (assetUrl.host ||
-            assetUrl.pathname.indexOf('//') === 0 ||
-            assetUrl.pathname.indexOf(';base64') !== -1) {
+          assetUrl.pathname.indexOf('//') === 0 ||
+          assetUrl.pathname.indexOf(';base64') !== -1) {
           return match;
         }
 
